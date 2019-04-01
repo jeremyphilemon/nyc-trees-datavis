@@ -66,3 +66,11 @@
 .is-circular {
     font-family: 'CircularStd';
 }
+
+.zone:hover {
+  fill: black !important;
+}
+
+.svg-zone {
+  
+}
