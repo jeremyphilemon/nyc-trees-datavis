@@ -68,9 +68,38 @@
 }
 
 .zone:hover {
-  fill: black !important;
+  fill: #363636 !important;
+}
+
+.level p {
+  color: black !important;
+}
+
+.level {
+  font-family: 'CircularStd' !important;
+  padding-top: 1rem;
+}
+
+.info {
+  font-family: 'CircularStd' !important;
+  font-size: 1.25rem;
+}
+
+.zone-meta {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-around;
+}
+
+.svg-bubble {
+  margin-top: -5rem !important;
+}
+
+.bubble-title {
+  margin-right: 5rem;
 }
 
 .svg-zone {
-  
+  padding-left: 5rem !important;
+  padding-right: 5rem !important;
 }
