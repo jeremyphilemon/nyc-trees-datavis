@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-import {geoMercator, geoPath, geoAlbers, geoAlbersUsa} from 'd3-geo';
+import {geoPath, geoAlbers} from 'd3-geo';
 import {select} from 'd3-selection';
 import {feature} from 'topojson-client';
-import {color} from 'd3-color';
 import * as d3 from 'd3';
 
 import 'bulma/css/bulma.css';
@@ -67,12 +66,12 @@ class Home extends Component {
   }
 
   createLegend() {
-    const node = this.node;
+    const svg = this.svg;
     const color_domain = [2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000];
     const ext_color_domain = [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000];
     const legend_labels = ['<2000', '2000+', '4000+', '6000+', '8000+', '10000+', '12000+', '14000+', '16000+', '18000+'];
     const ls_w = 20; const ls_h = 20;
-    const legend = select(node)
+    const legend = select(svg)
         .selectAll('legend')
         .data(ext_color_domain)
         .enter().append('g')
@@ -102,7 +101,7 @@ class Home extends Component {
   }
 
   createMap() {
-    const node = this.node;
+    const svg = this.svg;
     const tooltip = select('body')
         .append('div')
         .style('position', 'absolute')
@@ -121,7 +120,7 @@ class Home extends Component {
         this.setState({
           mapData: feature(mapData, mapData.objects.ZIP_CODE_040114).features,
         });
-        select(node)
+        select(svg)
             .selectAll('path')
             .data(feature(mapData, mapData.objects.ZIP_CODE_040114).features)
             .enter().append('path')
@@ -179,7 +178,7 @@ class Home extends Component {
             </div>
           </div>
         </section>
-        <svg ref={(node) => this.node = node} preserveAspectRatio="xMidYMin" viewBox="0 0 500 250"/>
+        <svg ref={(svg) => this.svg = svg} preserveAspectRatio="xMidYMin" viewBox="0 0 500 250"/>
       </div>
     );
   }
