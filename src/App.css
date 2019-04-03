@@ -89,10 +89,51 @@
   display: flex !important;
   flex-direction: row !important;
   justify-content: space-around;
+  flex-flow: row wrap;
 }
 
 .svg-bubble {
   margin-top: -5rem !important;
+}
+
+.top-trees, .health-trees {
+  margin: 5rem;
+  margin-top: 2.5rem;
+  margin-right: 2.5rem;
+}
+
+.top-trees {
+  flex-grow: 1;
+}
+
+.health-trees {
+  flex-grow: 1;
+}
+
+.species-subtitle {
+  margin-bottom: 0.5rem !important; 
+}
+
+.more-meta {
+  display: flex;
+  flex-direction: row;
+}
+
+.name-text, .value-text {
+  font-family: 'CircularStd' !important;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.tree-ratio {
+  margin-left: 0 !important;
+}
+
+.top-species-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: rgb(44, 149, 76) !important;
 }
 
 .bubble-title {
@@ -102,4 +143,20 @@
 .svg-zone {
   padding-left: 5rem !important;
   padding-right: 5rem !important;
+}
+
+@-webkit-keyframes fadein {
+    from { opacity: 0; visibility: hidden; }
+    to   { opacity: 1; visibility: visible; }
+}
+
+.more-meta {
+  visibility: hidden !important;
+  -webkit-animation: fadein 850ms ease-in 1.65s;
+  animation-fill-mode: forwards; 
+}
+
+.fade-in {
+  -webkit-animation: fadein 850ms ease-in 1.65s;
+  animation-fill-mode: forwards; 
 }

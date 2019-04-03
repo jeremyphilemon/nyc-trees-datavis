@@ -12,8 +12,13 @@ class Bubble extends Component {
       zipcode: this.props.zipcode,
       width: 500,
       height: 500,
+      data: [],
     };
     this.createBubble = this.createBubble.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+
   }
 
   componentDidMount() {

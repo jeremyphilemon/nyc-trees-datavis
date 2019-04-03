@@ -14,10 +14,9 @@ class Home extends Component {
     this.state = {
       mapData: [],
       lookup: {},
-      datapoint: '',
-      stroke: 0,
       width: 960,
       height: 600,
+      datapoint: '',
     };
     this.createMap = this.createMap.bind(this);
     this.projectionAlbers = this.projectionAlbers.bind(this);
@@ -32,7 +31,7 @@ class Home extends Component {
       });
     });
     this.setState({lookup: lookup});
-    this.createMap();
+    this.fetchMap();
     this.createLegend();
   }
 
@@ -94,16 +93,30 @@ class Home extends Component {
         .text(function(d, i) {
           return legend_labels[i];
         })
+        .attr('class', 'is-circular')
         .style('fill', '#424242')
         .style('font-size', '0.5rem')
-        .style('font-weight', '600')
-        .attr('class', 'is-circular');
+        .style('font-weight', '600');
+  }
+
+  fetchMap() {
+    fetch('/newyork.json').then((response) => {
+      response.json().then((mapData) => {
+        const features = feature(mapData, mapData.objects.ZIP_CODE).features;
+        this.setState({
+          mapData: features,
+        }, ()=>{
+          this.createMap();
+        });
+      });
+    });
   }
 
   createMap() {
-    const svg = this.svg;
     const tooltip = select('body')
         .append('div')
+        .attr('class', 'is-circular')
+        .text('tooltip')
         .style('position', 'absolute')
         .style('z-index', '10')
         .style('visibility', 'hidden')
@@ -111,52 +124,43 @@ class Home extends Component {
         .style('padding', '8px')
         .style('background-color', 'rgba(0, 0, 0, 0.75)')
         .style('border-radius', '6px')
-        .attr('class', 'is-circular')
         .style('font-weight', '600')
-        .style('text-transform', 'capitalize')
-        .text('tooltip');
-    fetch('/newyork.json').then((response) => {
-      response.json().then((mapData) => {
-        this.setState({
-          mapData: feature(mapData, mapData.objects.ZIP_CODE_040114).features,
+        .style('text-transform', 'capitalize');
+    select(this.svg)
+        .selectAll('path')
+        .data(this.state.mapData)
+        .enter().append('path')
+        .attr('d', geoPath().projection(this.projectionAlbers()))
+        .attr('class', 'zone')
+        .style('stroke', 'white')
+        .style('stroke-width', 0.25)
+        .style('cursor', 'pointer')
+        .style('fill', (datapoint) => {
+          return this.generateColor(datapoint);
+        })
+        .on('mouseover', (datapoint) => {
+          this.showZip(datapoint);
+          tooltip.text(this.state.datapoint.properties.ZIPCODE);
+          tooltip.style('visibility', 'visible');
+        })
+        .on('mousemove', (datapoint)=> {
+          return tooltip.style('top', (d3.event.pageY-10)+'px').style('left', (d3.event.pageX+10)+'px');
+        })
+        .on('mouseout', (datapoint) => {
+          this.showZip(0);
+          return tooltip.style('visibility', 'hidden');
+        })
+        .on('click', (datapoint) => {
+          this.handleClick(datapoint, );
+          return tooltip.style('visibility', 'hidden');
         });
-        select(svg)
-            .selectAll('path')
-            .data(feature(mapData, mapData.objects.ZIP_CODE_040114).features)
-            .enter().append('path')
-            .attr('d', geoPath().projection(this.projectionAlbers()))
-            .attr('class', 'zone')
-            .style('stroke', 'white')
-            .style('stroke-width', 0.25)
-            .style('cursor', 'pointer')
-            .style('fill', (datapoint) => {
-              return this.generateColor(datapoint);
-            })
-            .on('mouseover', (datapoint) => {
-              this.showZip(datapoint);
-              tooltip.text(this.state.datapoint.properties.ZIPCODE);
-              tooltip.style('visibility', 'visible');
-            })
-            .on('mousemove', (datapoint)=> {
-              return tooltip.style('top', (d3.event.pageY-10)+'px').style('left', (d3.event.pageX+10)+'px');
-            })
-            .on('mouseout', (datapoint) => {
-              this.showZip(0);
-              return tooltip.style('visibility', 'hidden');
-            })
-            .on('click', (datapoint) => {
-              this.handleClick(datapoint, );
-              return tooltip.style('visibility', 'hidden');
-            });
-      });
-    });
   }
 
   render() {
     if (this.props.location.state!==undefined && this.props.location.state.redirect) {
       return <Redirect push to={{
         pathname: `/zipcode/${this.props.location.state.zipcode}`,
-        state: {datapoint: this.state.datapoint, color: this.state.color, population: this.state.trees_count},
+        state: {datapoint: this.state.datapoint, population: this.state.trees_count},
       }}/>;
     }
 
