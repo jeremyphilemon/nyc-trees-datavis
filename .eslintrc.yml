@@ -12,4 +12,6 @@ parserOptions:
   sourceType: module
 plugins:
   - react
-rules: {}
+rules: {
+	"require-jsdoc" : 0
+}

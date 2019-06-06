@@ -17,6 +17,7 @@ class Home extends Component {
       width: 960,
       height: 600,
       datapoint: '',
+      loaded: false,
     };
     this.createMap = this.createMap.bind(this);
     this.projectionAlbers = this.projectionAlbers.bind(this);
@@ -32,7 +33,6 @@ class Home extends Component {
     });
     this.setState({lookup: lookup});
     this.fetchMap();
-    this.createLegend();
   }
 
   projectionAlbers() {
@@ -78,7 +78,7 @@ class Home extends Component {
     legend.append('rect')
         .attr('x', 20)
         .attr('y', function(d, i) {
-          return 200 - (i*ls_h) - 2*ls_h;
+          return 200 - (i*ls_h) - (2*ls_h);
         })
         .attr('width', ls_w)
         .attr('height', ls_h)
@@ -106,7 +106,12 @@ class Home extends Component {
         this.setState({
           mapData: features,
         }, ()=>{
-          this.createMap();
+          this.setState({
+            loaded: true,
+          }, ()=>{
+            this.createMap();
+            this.createLegend();
+          });
         });
       });
     });
@@ -171,20 +176,38 @@ class Home extends Component {
       }}/>;
     }
 
-    return (
-      <div className="site-content">
-        <section className="hero">
-          <div className="hero-body">
-            <div className="container">
-              <h1 className="title is-circular">
+    if (!this.state.loaded) {
+      return (
+        <div className="site-content">
+          <section className="hero">
+            <div className="hero-body">
+              <div className="container">
+                <h1 className="title is-circular">
                 Trees in New York City <br/>
-              </h1>
+                </h1>
+              </div>
             </div>
-          </div>
-        </section>
-        <svg ref={(svg) => this.svg = svg} preserveAspectRatio="xMidYMin" viewBox="0 0 500 250"/>
-      </div>
-    );
+          </section>
+        </div>
+      );
+    }
+
+    if (this.state.loaded) {
+      return (
+        <div className="site-content">
+          <section className="hero">
+            <div className="hero-body">
+              <div className="container">
+                <h1 className="title is-circular">
+                Trees in New York City <br/>
+                </h1>
+              </div>
+            </div>
+          </section>
+          <svg className="add-fade" ref={(svg) => this.svg = svg} preserveAspectRatio="xMidYMin" viewBox="0 0 500 250"/>
+        </div>
+      );
+    }
   }
 }
 
