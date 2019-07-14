@@ -92,6 +92,16 @@
   flex-flow: row wrap;
 }
 
+.zone-boundary {
+  margin-left: 1.25rem;
+}
+
+.zone-details {
+  margin-top: auto;
+  margin-left: 2rem;
+  margin-bottom: 5rem;
+}
+
 .svg-bubble {
   margin-top: -5rem !important;
 }
@@ -100,14 +110,24 @@
   margin: 5rem;
   margin-top: 2.5rem;
   margin-right: 2.5rem;
+  margin-left: 2.5rem;
 }
 
 .top-trees {
   flex-grow: 1;
+  max-width: 15rem;
+  margin-bottom: 0rem;
+}
+
+.loaders {
+  margin-left: 1rem;
+  vertical-align: middle;
 }
 
 .health-trees {
   flex-grow: 1;
+  max-width: 15rem;
+  margin-left: 1rem;
 }
 
 .species-subtitle {
@@ -117,6 +137,8 @@
 .more-meta {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .name-text, .value-text {
@@ -146,7 +168,7 @@
 }
 
 .add-fade {
-  -webkit-animation: fadein 350ms ease-in;
+  -webkit-animation: fadein 200ms ease-in;
   animation-fill-mode:forwards;
 }
 

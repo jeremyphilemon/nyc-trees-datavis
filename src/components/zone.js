@@ -50,6 +50,10 @@ class Zone extends Component {
       speciesCount: Object.keys(treeCount).length,
       health: [good, fair, poor],
       treeCount: treeCount,
+    }, ()=>{
+      this.setState({
+        loaded: true,
+      });
     });
   }
 
@@ -161,6 +165,7 @@ class Zone extends Component {
               <div className="top-trees">
                 <h1 className="title is-circular">
                   There are {this.state.speciesCount} different species
+                  <img src="/loader.svg" className="loaders" style={{visibility: this.state.loaded ? 'hidden' : 'visible'}}/>
                 </h1>
                 <h2 className="subtitle is-circular species-subtitle">
                   Most abundant in this area
@@ -169,7 +174,7 @@ class Zone extends Component {
                   {
                     this.state.topTrees.map((tree, id)=>{
                       return (
-                        <p class="top-species-name" key={id}>{tree[0]}</p>
+                        <p class="top-species-name is-circular" key={id}>{tree[0]}</p>
                       );
                     })
                   }
@@ -178,6 +183,8 @@ class Zone extends Component {
               <div className="health-trees">
                 <h1 className="title is-circular has-text-centered">
                   Health Status
+                  <img src="/loader.svg" className="loaders" style={{visibility: this.state.loaded ? 'hidden' : 'visible'}}/>
+
                 </h1>
                 <div className="health-trees">
                   <Pie data={this.state.health}/>
